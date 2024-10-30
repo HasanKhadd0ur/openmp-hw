@@ -1,0 +1,37 @@
+# Compiler and flags
+CC = g++
+CFLAGS = -fopenmp -O2
+PROF_FLAGS = -pg
+
+# Targets
+TARGET_INTEGRAL = integral
+TARGET_MANDELBROT = mandelbrot
+
+# Default target (builds both programs)
+all: $(TARGET_INTEGRAL) $(TARGET_MANDELBROT)
+
+# Conditional build target
+build:
+	$(CC) $(CFLAGS) -o $($(Pr)) $(Pr).c
+
+# Conditional run target
+run:
+	./$($(Pr))
+
+# Profile the specified program
+profile:
+	$(CC) $(CFLAGS) $(PROF_FLAGS) -o $($(Pr)) $(Pr).c
+	./$($(Pr))
+	gprof $($(Pr)) gmon.out > $(Pr)_profile.txt
+	cat $(Pr)_profile.txt
+
+# Build each program individually
+$(TARGET_INTEGRAL): integral.c
+	$(CC) $(CFLAGS) -o $(TARGET_INTEGRAL) integral.c
+
+$(TARGET_MANDELBROT): mandelbrot.cpp
+	$(CC) $(CFLAGS) -o $(TARGET_MANDELBROT) mandelbrot.cpp
+
+# Clean command
+clean:
+	rm -f $(TARGET_INTEGRAL) $(TARGET_MANDELBROT) gmon.out integral_profile.txt mandelbrot_profile.txt
