@@ -2,10 +2,10 @@ Flat profile:
 
 Each sample counts as 0.01 seconds.
   %   cumulative   self              self     total           
- time   seconds   seconds    calls  ms/call  ms/call  name    
- 50.00      0.01     0.01        2     5.00     5.00  __gcc_deregister_frame
- 50.00      0.02     0.01                             __logl_internal
-  0.00      0.02     0.00        1     0.00     0.00  calculate_integral
+ time   seconds   seconds    calls  Ts/call  Ts/call  name    
+ 87.94      1.75     1.75                             frame_dummy
+ 12.06      1.99     0.24                             _init
+  0.00      1.99     0.00        1     0.00     0.00  calculateMandelbrotArea(int)
 
  %         the percentage of the total running time of the
 time       program used by this function.
@@ -34,7 +34,7 @@ name       the name of the function.  This is the minor sort
 	   in parenthesis it shows where it would appear in
 	   the gprof listing if it were to be printed.
 
-Copyright (C) 2012-2019 Free Software Foundation, Inc.
+Copyright (C) 2012-2024 Free Software Foundation, Inc.
 
 Copying and distribution of this file, with or without modification,
 are permitted in any medium without royalty provided the copyright
@@ -43,26 +43,17 @@ notice and this notice are preserved.
 		     Call graph (explanation follows)
 
 
-granularity: each sample hit covers 4 byte(s) for 50.00% of 0.02 seconds
+granularity: each sample hit covers 4 byte(s) for 0.50% of 1.99 seconds
 
 index % time    self  children    called     name
-                0.01    0.00       1/2           GOMP_parallel [3]
-                0.01    0.00       1/2           gomp_thread_start [4]
-[1]     50.0    0.01    0.00       2         __gcc_deregister_frame [1]
+                                                 <spontaneous>
+[1]     87.9    1.75    0.00                 frame_dummy [1]
 -----------------------------------------------
                                                  <spontaneous>
-[2]     50.0    0.01    0.00                 __logl_internal [2]
+[2]     12.1    0.24    0.00                 _init [2]
 -----------------------------------------------
-                                                 <spontaneous>
-[3]     25.0    0.00    0.01                 GOMP_parallel [3]
-                0.01    0.00       1/2           __gcc_deregister_frame [1]
------------------------------------------------
-                                                 <spontaneous>
-[4]     25.0    0.00    0.01                 gomp_thread_start [4]
-                0.01    0.00       1/2           __gcc_deregister_frame [1]
------------------------------------------------
-                0.00    0.00       1/1           main [272]
-[5]      0.0    0.00    0.00       1         calculate_integral [5]
+                0.00    0.00       1/1           main [7]
+[9]      0.0    0.00    0.00       1         calculateMandelbrotArea(int) [9]
 -----------------------------------------------
 
  This table describes the call tree of the program, and was sorted by
@@ -147,7 +138,7 @@ index % time    self  children    called     name
  for that member, how many times it was called from other members of
  the cycle.
 
-Copyright (C) 2012-2019 Free Software Foundation, Inc.
+Copyright (C) 2012-2024 Free Software Foundation, Inc.
 
 Copying and distribution of this file, with or without modification,
 are permitted in any medium without royalty provided the copyright
@@ -155,4 +146,4 @@ notice and this notice are preserved.
 
 Index by function name
 
-   [1] __gcc_deregister_frame  [2] __logl_internal         [5] calculate_integral
+   [9] calculateMandelbrotArea(int) [2] _init              [1] frame_dummy
