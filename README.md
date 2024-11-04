@@ -6,14 +6,30 @@ This repository contains two parallel C/C++ programs developed using OpenMP for 
 
 ## Overview
 This homework includes two C/C++ programs that leverage OpenMP for parallel computation:
-1. **Numerical Integration** of \( f(x) = \frac{\ln(x)}{x} \) over the interval \([1, 10]\).
+1. **Numerical Integration** of $ f(x) = \frac{\ln(x)}{x} $ over the interval $[1, 10]$.
 2. **Mandelbrot Set Area Approximation** using the Monte Carlo method.
 
 Both programs contain sequential and parallel implementations to analyze performance and efficiency using OpenMP, along with an automated build and run process via Make.
 
 ---
+## Solution Structure 
 
-### Question 1: Numerical Integration
+``` 
+OPENMP-HW
+├── out
+│   ├── integral
+│   └── mandelbrot
+├── profiles
+│   ├── integral_profile.txt
+│   └── mandelbrot_profile.txt
+├── gmon.out
+├── integral.c
+├── Makefile
+├── mandelbrot.c
+└── README.md
+```
+
+## Question 1: Numerical Integration
 **Objective**: Calculate the integral of \( \frac{\ln(x)}{x} \) over \([1, 10]\) using a numerical integration technique that partitions the area under the curve into rectangles with equal width. The sum of these rectangles provides an approximation of the integral.
 
 - **Approach**: Implemented the Riemann sum (rectangle) method, dividing the interval into `num_rectangles` of equal width.
@@ -29,10 +45,10 @@ Both programs contain sequential and parallel implementations to analyze perform
 
 ---
 
-## Files (To Do)
+## Files 
 - **`integral.c`**: Program for parallel numerical integration.
 - **`mandelbrot.cpp`**: Program for parallel area approximation of the Mandelbrot set using Monte Carlo.
-- **`Makefile`**: Automates building, running, and cleaning both programs.
+- **`Makefile`**: Automates building, running, profiling and cleaning both programs.
 
 ---
 
@@ -44,19 +60,20 @@ Both programs contain sequential and parallel implementations to analyze perform
 ### Steps
 1. **Build**: To compile both programs, run:
    ```bash
-   make buid_all
+   make all
    ```
 2. **Run Numerical Integration Program**:
    ```bash
-   make run Pr=integral
+   make run Pr=integral n=<num_threads> r=<num_rectangles>
+
    ```
 3. **Run Mandelbrot Area Program**:
    ```bash
-   make run Pr=mandelbrot
+   make run Pr=mandelbrot   n=<num_threads>
    ```
 4. **Profiling the Program Executing**:
    ```bash
-   make Profile Pr=mandelbrot
+   make Profile Pr=<program_name> n=<num_threads> 
    ```
 
 5. **Clean**: To remove compiled binaries, run:
