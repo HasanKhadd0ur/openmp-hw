@@ -1,52 +1,98 @@
-#include "iostream"
+#include <stdio.h>
+#include <stdlib.h>
 #include <complex>
 #include <omp.h>
-#include <cstdlib>
 
-bool isInMandelbrotSet(double real, double imag, int max_iterations) {
-    std::complex<double> c(real, imag);
-    std::complex<double> z = 0;
-    for (int i = 0; i < max_iterations; ++i) {
+using namespace std ;
+// global varibles 
+
+// define the interval for the complex plane region 
+const double REAL_MIN = -2.5;
+const double REAL_MAX = 1.0;
+const double IMAG_MIN = -1.0;
+const double IMAG_MAX = 1.0;
+
+
+// define the max iteration for check the mandlebrot set 
+const int MAXITERATION = 3000;
+
+// function to check if a point is in the Mandelbrot set
+bool isInMandelbrotSet(double real, double imag) {
+    complex<double> c(real, imag);
+    complex<double> z = 0;
+    
+    // iterate to check if the point diverges
+    for (int i = 0; i < MAXITERATION; ++i) {
         z = z * z + c;
-        if (std::abs(z) > 2.0) return false;
+        
+        // if the magnitude of z exceeds 2, it escapes the set
+        if (abs(z) > 2.0) return false;
     }
+    
+    // if max_iterations reached without escaping, it s not  in the set
     return true;
 }
 
-double calculateMandelbrotArea(int num_points, int max_iterations, bool parallel) {
-    int in_set_count = 0;
+// function to estimate the area of the Mandelbrot set
+//  using Monte Carlo method
+double calculateMandelbrotArea(int numIteration) {
+    int inSetCount = 0;
     double real, imag;
 
-    #pragma omp parallel for reduction(+:in_set_count) private(real, imag) if (parallel)
-    for (int i = 0; i < num_points; ++i) {
-        real = (rand() / (double)RAND_MAX) * 3.5 - 2.5;  // Real part in range [-2.5, 1]
-        imag = (rand() / (double)RAND_MAX) * 2.0 - 1.0;  // Imaginary part in range [-1, 1]
-        if (isInMandelbrotSet(real, imag, max_iterations)) {
-            in_set_count++;
+    // Parallelize the loop
+    #pragma omp parallel for reduction(+:inSetCount) private(real, imag) 
+    for (int i = 0; i < numIteration; ++i) {
+        
+        // generate a random point within the specified complex plane region
+
+        // Real part in range [REAL_MIN, REAL_MAX]
+        real = (rand() / (double)RAND_MAX) * (REAL_MAX - REAL_MIN) + REAL_MIN;
+
+        // Imagina part in range [IMAG_MIN, IMAG_MAX]
+        imag = (rand() / (double)RAND_MAX) * (IMAG_MAX - IMAG_MIN) + IMAG_MIN;  
+
+        // check if the point is within the mandelbrot set
+        if (isInMandelbrotSet(real, imag)) {
+            inSetCount++;  
         }
     }
 
-    double area = (3.5 * 2.0) * (in_set_count / (double)num_points);
+    // calculate the estimated area based on the fraction of points in the set
+
+    double area = ((REAL_MAX - REAL_MIN) * (IMAG_MAX - IMAG_MIN)) * (inSetCount / (double)numIteration);
+    
     return area;
 }
 
-int main() {
-    int num_points = 1000000;         // Number of random points for Monte Carlo
-    int max_iterations = 5000;        // Maximum iterations for Mandelbrot check
+int main(int argc, char *argv[]) {
+    // 
+    double startTime, endTime ;
+    
+    // number of iteration  for Monte Carlo method
+    int numIteration = 1000000;     
+    // default number of threads
+    int numThreads = 4;            
 
-    // Sequential run
-    double start_time = omp_get_wtime();
-    double area_seq = calculateMandelbrotArea(num_points, max_iterations, false);
-    double end_time = omp_get_wtime();
-    std::cout << "Sequential Mandelbrot area: " << area_seq << std::endl;
-    std::cout << "Sequential time: " << end_time - start_time << " seconds\n";
+    // check if the number of threads is provided as a command line argument
+    if (argc > 1) {
+        // Convert argument to integer
+        numThreads = atoi(argv[1]);  
+    }
 
-    // Parallel run
-    start_time = omp_get_wtime();
-    double area_par = calculateMandelbrotArea(num_points, max_iterations, true);
-    end_time = omp_get_wtime();
-    std::cout << "Parallel Mandelbrot area: " << area_par << std::endl;
-    std::cout << "Parallel time: " << end_time - start_time << " seconds\n";
+    // set the number of threads for OpenMP
+    omp_set_num_threads(numThreads);
+
+    // execution
+    
+    // Start timer
+    startTime = omp_get_wtime();                   
+    // Calculate area
+    double area_par = calculateMandelbrotArea(numIteration);   
+    // End timer
+    endTime = omp_get_wtime();                
+    
+    printf("[+] Mandelbrot area: %.10f\n", area_par);
+    printf("[+] time: %.4f seconds with %d threads\n", endTime - startTime, numThreads);
 
     return 0;
 }
