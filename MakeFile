@@ -1,5 +1,5 @@
 # Compiler and flags
-CC = gcc
+CC = g++
 CFLAGS = -fopenmp -O2
 PROF_FLAGS = -pg
 
