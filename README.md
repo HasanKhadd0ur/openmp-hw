@@ -88,12 +88,18 @@ Each program outputs the calculated area and the execution time for both sequent
 ## Results Analysis
 
 - **Integration Program**:
-  - **Expected Output**:
-  - **Performance**: 
+
+
+![alt text](images/integral_1.png)
+
+![alt text](images/integral_2.png)
 
 - **Mandelbrot Area Program**:
-  - **Expected Output**: 
-  - **Performance**:
+
+![alt text](images/mand_1.png)
+![alt text](images/mand_2.png)
+![alt text](images/error.png)
+
 
 ---
 
