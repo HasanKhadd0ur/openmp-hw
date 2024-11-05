@@ -32,7 +32,7 @@ double calculateIntegral(int numRectangles, int start, int end) {
 }
 // anpother appraoch to calc the itegral using openmp 
 // by using an atomic operation for the (+=)
-double calculateIntegralTrapezoidal(int numRectangles, int start, int end) {
+double calculateIntegralSecondApproach(int numRectangles, int start, int end) {
     double width = (end - start) / (numRectangles * 1.0);
     double totalArea = 0.0;
 
